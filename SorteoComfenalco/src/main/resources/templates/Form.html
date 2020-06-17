@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+<body>
+	<div class="container mt-4">
+		<div class="col-sm-6">
+			<form   autocomplete="off"  th:object="${form}" th:action= "${editMode}? @{/editUser} : @{/save}"  method="POST">
+			<input class="form-control" type=hidden th:field="${form.id}"  th:if="${editMode}">
+			
+				<div class="card">
+					<div class="card-header">
+						<h2>Participante Sorteo</h2>
+					</div>
+					<div >
+					<div class="alert alert-danger text-center" role="alert" th:if="${formErrorMessage}" th:text="${formErrorMessage}"><b>Error MEssage</b></div>
+				    </div>
+					<div class="card-body">
+						<div class="form-group">
+							<label>Tipo Documento</label> 
+							<select th:field="*{tipo_documento}" class="form-control" >
+				            <option th:each="tipo :${tipos}" th:value="${tipo.codigo}" th:text="${tipo.nombre}">
+				            </option>
+			     </select>
+						</div>
+						<div>
+							<label>Numero Documento</label> 
+							 <input th:field="${form.n_documento}" id="n_documento" placeholder="Cantidad actual del producto" type="number" class="form-control">
+							 <div class="alert-danger" th:if="${#fields.hasErrors('n_documento')}" th:errors="*{n_documento}">Name Error</div>
+						</div>
+
+						<div class="form-group">
+							<label>Nombres</label> 
+							<input class="form-control" type="text" th:field="${form.nombres}">
+							<div class="alert-danger" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}">Name Error</div>
+						</div>
+
+						<div class="form-group">
+							<label>Apellidos</label>
+							<input class="form-control" type="text" th:field="${form.apellidos}">
+							<div class="alert-danger" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}">Name Error</div>
+						</div>
+
+						<div class="form-group">
+							<label>Fecha de Nacimiento</label>
+							<input class="form-control" type="date" th:field="${form.fecha_nacimiento}">
+							<div class="alert-danger" th:if="${#fields.hasErrors('fecha_nacimiento')}" th:errors="*{apellidos}">Name Error</div>
+						</div>
+						
+					</div>
+					<div class= "card-footer">
+					<a class="btn btn-secondary"  th:href="@{'/index/cancel'}">Cancelar</a>
+				
+					<input type="submit" value="Guardar"  th:value="${editMode} ? 'Guardar Cambios': 'Crear Usuario' " class="btn btn-success">
+					</div>	
+			</form>
+		</div>
+	</div>
+</body>
+</html>

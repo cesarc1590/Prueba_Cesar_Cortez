@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>List de Partisipantes</title>
+
+<!--JQUERY-->
+<script
+ 		src="https://code.jquery.com/jquery-3.3.1.min.js"
+ 			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+ 			crossorigin="anonymous"></script>
+	
+	<!-- FRAMEWORK BOOTSTRAP para el estilo de la pagina-->
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script 
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	
+	<!-- Los iconos tipo Solid de Fontawesome-->
+	<link rel="stylesheet"
+		href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+	<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+	
+	<!-- Nuestro css-->
+	<link rel="stylesheet" type="text/css" href="static/css/index.css"
+		th:href="@{/css/index.css}">
+
+	<!-- DATA TABLE -->
+	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">	
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+	
+	<script type="text/javascript">
+	
+function confirmDelete(id){
+	$("#idborrar").val(id);
+	$('#deleteModal').modal('show');
+}
+
+
+function deleteUser(){
+	var id = $("#idborrar").val();
+window.location = "eliminar/"+id;
+}
+</script>
+</head>
+<body>
+<div class="container ">
+<br>
+   <div>
+    <a th:href = "@{/nuevo}" class="btn btn-primary">Nuevo Participante</a>
+   
+   </div>
+	<div class="mx-auto col-sm-12 main-section" id="myTab" role="tablist">
+		<ul class="nav nav-tabs justify-content-end">
+			<li class="nav-item">
+			<a class="nav-link active" th;classappend="@{listTab}" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="false">Lista de Participantes</a>
+			</li>
+			<li class="nav-item">
+			<a class="nav-link"  th;classappend="@{formTab}" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="true">Resultado Sorteo</a>				   	
+			</li>
+		</ul>
+		
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active"  th;classappend="@{ListTab}" id="list" role="tabpanel" aria-labelledby="list-tab">
+				<div class="card">
+					<div class="card-header">
+						<h4>Participantes</h4>
+						   <div class="alert alert-danger text-center" role="alert" th:if="${listErrorMenssage}" th:text="${listErrorMenssage}"><b>Error MEssage</b></div>
+					</div>
+					<div class="table-responsive">
+							<table id="userList" class="table table-bordered table-hover table-striped">
+								<thead class="thead-light">
+									<tr>
+									    <th scope="col">#</th>
+										<th scope="col">TIPO DOCUMENTO</th>
+										<th scope="col">NUMERO DOCUMENTO</th>
+										<th scope="col">NOMBRES</th>
+										<th scope="col">APELLIDOS</th>
+										<th scope="col">FECHA DE NACIMIENTO</th>
+										<th scope="col">GANO</th>
+										<th></th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="persona:${personas}">
+										<td th:text="${persona.id}"></td>
+										<td th:text="${persona.tipo_documento}"></td>
+										<td th:text="${persona.n_documento}"></td>
+										<td th:text="${persona.nombres}"></td>
+										<td th:text="${persona.apellidos}"></td>
+										<td th:text="${persona.fecha_nacimiento}"></td>
+										<td th:text="${persona.gano}"></td>
+										<td><a th:href="@{/editar/}+${persona.id}"><i class="fas fa-edit"></i></a> |
+										 <a href="#" th:onclick="'javascript:confirmDelete(\''+${persona.id} + '\');'"><i class="fas fa-user-times"></i></a>
+										
+                                        </td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" th;classappend="@{formTab}" id="form" role="tabpanel" aria-labelledby="form-tab">
+				<div class="card"><div class="table-responsive">
+					<div class="card-header">
+						<a th:href = "@{/sorteo}" class="btn btn-warning">Iniciar Sorteo</a>
+					</div>
+					<div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-7">
+                    <br> 
+					<h4>Ganadores </h4>	
+					<div class="alert alert-danger text-center" role="alert" th:if="${listErrorMenssage}" th:text="${listErrorMenssage}"><b>Error MEssage</b></div>
+				<div th:include="user-form/ganadores.html" th:remove="tag"></div>
+				</div>
+				<div class="col-md-3">
+				<br>
+                 <h4>Premios Disponibles </h4>	
+				<table class="table">
+					<thead class="thead-light">
+								<tr class="table-success">
+												<th scope="col">PREMIO</th>
+												<th scope="col">CANTIDAD</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="premio:${premios}">
+												<td th:text="${premio.descripcion}"></td>
+												<td th:text="${premio.cantidad}"></td>
+											</tr>
+
+										</tbody>
+									</table>
+								</div>
+			    <ul>
+                 <li th:each="variable : ${Premios}" th:text="${Premios.cantidad}"></li>
+                </ul>
+              
+	     </div>
+	</div>
+	</div>
+</div> 
+	<div th:include="user-form/confirm-delete-modal.html" th:remove="tag"></div>	    
+</body>
+</html>

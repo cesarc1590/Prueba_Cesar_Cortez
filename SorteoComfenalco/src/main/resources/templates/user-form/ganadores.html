@@ -1,0 +1,20 @@
+
+<table class="table">
+			<thead class="thead-light">
+				<class="table-warning">
+					<th scope="col">NUMERO DOCUMENTO</th>
+					<th scope="col">NOMBRES</th>
+					<th scope="col">APELLIDOS</th>
+					<th scope="col">PREMIO GANADO</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				<tr th:each="ganador:${ganadores}">
+					<td th:text="${ganador.n_documento}"></td>
+					<td th:text="${ganador.nombres}"></td>
+					<td th:text="${ganador.apellidos}"></td>
+					<td th:text="${ganador.premio}"></td></tr>
+			</tbody>
+</table>
+
